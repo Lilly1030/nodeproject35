@@ -5,6 +5,7 @@ const Category = require('./models/category')
 const User = require('./models/User')
 const UserProfile = require('./models/UserProfile')
 const Seller = require('./models/Seller')
+const Brand = require('./models/brand')
 
 const a = new User({username: "varshini", password: "38279829189", email: "kvsgsdajah"})
 a.save().then(() => console.log('Successfully inserted'));
@@ -23,25 +24,43 @@ db.once("open", function () {
   console.log("Connected successfully");
 });
 
-app.get("/admin/category",async (req,res)=>{
-    const cat = await Category.find({})
-    cat_json= JSON.stringify(cat)
-    res.json(cat)
-})
-
+//User
 app.get("/admin/user",async (req,res)=>{
   const user = await User.find({})
   user_json= JSON.stringify(user)
   res.json(user)
 })
 
-
+//Category
 app.post("/admin/category",async (req,res)=>{
     const category = new Category(req.body)
     const cate = await category.save()
     res.json(cate)
 })
 
+app.get("/admin/category",async (req,res)=>{
+  const cat = await Category.find({})
+  cat_json= JSON.stringify(cat)
+  res.json(cat)
+})
+
+app.get('/admin/category/:id', async (req,res)=>{
+    const cat = await Category.findById({"_id": req.params.id})
+    res.json(cat)
+})
+
+//Brand
+
+app.post("/admin/brands", async (req,res)=>{
+  const bran = new Brand(req.body)
+  const b = await bran.save()
+  res.json(b)
+})
+app.get("/admin/brands", async (req,res)=>{
+
+})
+
+//Profile
 app.get("/admin/UserProfile",async (req,res)=>
 {
   const userProfile = await UserProfile.find({})
@@ -72,7 +91,7 @@ app.post("/admin/userprofile",async (req,res)=>{
   res.json(profile)
 })
 
-
+//Seller
 app.post("/admin/seller",async (req,res)=>{
   const seller_temp= new Seller(req.body)
   const seller_t = await seller_temp.save()

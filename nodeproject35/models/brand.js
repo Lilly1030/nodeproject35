@@ -6,8 +6,8 @@ const BrandSchema = new mongoose.Schema(
           type:String
       },
       Category : {
-          type: String
-
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Category'
       },
      
 
