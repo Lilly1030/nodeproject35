@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Category = require('./models/category')
 const User = require('./models/User')
 const UserProfile = require('./models/UserProfile')
+const Seller = require('./models/Seller')
 
 const a = new User({username: "varshini", password: "38279829189", email: "kvsgsdajah"})
 a.save().then(() => console.log('Successfully inserted'));
@@ -21,6 +22,7 @@ db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function () {
   console.log("Connected successfully");
 });
+
 app.get("/admin/category",async (req,res)=>{
     const cat = await Category.find({})
     cat_json= JSON.stringify(cat)
@@ -45,16 +47,40 @@ app.get("/admin/UserProfile",async (req,res)=>
   const userProfile = await UserProfile.find({})
   // const userProf= JSON.stringify(userProfile)
   res.json(userProfile)
-
-
 })
 
 
-app.post("/admin/UserProfile",async (req,res)=>{
+app.post("/admin/userprofile",async (req,res)=>{
 
   const userprofile= new UserProfile(req.body)
   const profile = await userprofile.save()
   res.json(profile)
 })
 
+app.get("/admin/useraddress",async (req,res)=>
+{
+  const userProfile = await UserProfile.find({})
+  // const userProf= JSON.stringify(userProfile)
+  res.json(userProfile)
+})
+
+
+app.post("/admin/userprofile",async (req,res)=>{
+
+  const userprofile= new UserProfile(req.body)
+  const profile = await userprofile.save()
+  res.json(profile)
+})
+
+
+app.post("/admin/seller",async (req,res)=>{
+  const seller_temp= new Seller(req.body)
+  const seller_t = await seller_temp.save()
+  res.json(seller_t)
+})
+
+app.get("/admin/seller",async (req,res)=>{
+  const seller = await Seller.find({})
+  res.json(seller)
+})
 app.listen(5000);
