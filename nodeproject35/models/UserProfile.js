@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const userprofileSchema = new mongoose.Schema({
     userId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     firstName: {
@@ -14,10 +14,8 @@ const userprofileSchema = new mongoose.Schema({
         required: true
     },
     phNo: {
-        type: Number,
-        required: true,
-        min: [10, 'Phone Number must be of length 10 digits'],
-        max: [10, 'Phone Number must be of length 10 digits']
+        type: String,
+        required: true
     }
 })
 

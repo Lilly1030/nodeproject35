@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const userProfileAddressSchema = new mongoose.Schema({
     userID:{
-        type: Schema.Types.ObjectID,
+        type: mongoose.Schema.Types.ObjectID,
         ref: 'User'
     },
     city:{

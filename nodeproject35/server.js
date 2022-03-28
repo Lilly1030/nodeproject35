@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const Category = require('./models/category')
 const User = require('./models/User')
+const UserProfile = require('./models/UserProfile')
 
 const a = new User({username: "varshini", password: "38279829189", email: "kvsgsdajah"})
 a.save().then(() => console.log('Successfully inserted'));
@@ -39,12 +40,21 @@ app.post("/admin/category",async (req,res)=>{
     res.json(cate)
 })
 
+app.get("/admin/UserProfile",async (req,res)=>
+{
+  const userProfile = await UserProfile.find({})
+  // const userProf= JSON.stringify(userProfile)
+  res.json(userProfile)
 
 
+})
 
 
+app.post("/admin/UserProfile",async (req,res)=>{
 
-
-
+  const userprofile= new UserProfile(req.body)
+  const profile = await userprofile.save()
+  res.json(profile)
+})
 
 app.listen(5000);
