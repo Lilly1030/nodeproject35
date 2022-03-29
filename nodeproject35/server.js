@@ -6,9 +6,7 @@ const User = require('./models/User')
 const UserProfile = require('./models/UserProfile')
 const Seller = require('./models/Seller')
 const Brand = require('./models/brand')
-
-const a = new User({username: "varshini", password: "38279829189", email: "kvsgsdajah"})
-a.save().then(() => console.log('Successfully inserted'));
+const SellerProfile = require('./models/SellerProfile')
 
 app.use(express.json())
 
@@ -25,81 +23,94 @@ db.once("open", function () {
 });
 
 //User
-app.get("/admin/user",async (req,res)=>{
+app.get("/user",async (req,res)=>{
   const user = await User.find({})
   user_json= JSON.stringify(user)
   res.json(user)
 })
 
 //Category
-app.post("/admin/category",async (req,res)=>{
+app.post("/category",async (req,res)=>{
     const category = new Category(req.body)
     const cate = await category.save()
     res.json(cate)
 })
 
-app.get("/admin/category",async (req,res)=>{
+app.get("/category",async (req,res)=>{
   const cat = await Category.find({})
   cat_json= JSON.stringify(cat)
   res.json(cat)
 })
 
-app.get('/admin/category/:id', async (req,res)=>{
+app.get('/category/:id', async (req,res)=>{
     const cat = await Category.findById({"_id": req.params.id})
     res.json(cat)
 })
 
 //Brand
 
-app.post("/admin/brands", async (req,res)=>{
+app.post("/brands", async (req,res)=>{
   const bran = new Brand(req.body)
   const b = await bran.save()
   res.json(b)
 })
-app.get("/admin/brands", async (req,res)=>{
-
+app.get("/brands", async (req,res)=>{
+  const bran = await Brand.find({})
+  const b = JSON.stringify(bran)
+  res.json(b)
 })
 
 //Profile
-app.get("/admin/UserProfile",async (req,res)=>
+app.get("/user/:id/userProfile",async (req,res)=>
 {
-  const userProfile = await UserProfile.find({})
+  const userProfile = await UserProfile.find({userId: req.params.id})
   // const userProf= JSON.stringify(userProfile)
   res.json(userProfile)
 })
 
 
-app.post("/admin/userprofile",async (req,res)=>{
+app.post("/user/:id/userprofile",async (req,res)=>{
 
-  const userprofile= new UserProfile(req.body)
+  const userprofile= new UserProfile({...req.body,userId: req.params.id})
   const profile = await userprofile.save()
   res.json(profile)
 })
 
-app.get("/admin/useraddress",async (req,res)=>
-{
-  const userProfile = await UserProfile.find({})
-  // const userProf= JSON.stringify(userProfile)
-  res.json(userProfile)
-})
+// app.get("/user/:id/useraddress",async (req,res)=>
+// {
+//   const userProfile = await UserProfile.find({})
+//   // const userProf= JSON.stringify(userProfile)
+//   res.json(userProfile)
+// })
 
 
-app.post("/admin/userprofile",async (req,res)=>{
 
-  const userprofile= new UserProfile(req.body)
-  const profile = await userprofile.save()
-  res.json(profile)
-})
+
 
 //Seller
-app.post("/admin/seller",async (req,res)=>{
+app.post("/seller",async (req,res)=>{
   const seller_temp= new Seller(req.body)
   const seller_t = await seller_temp.save()
   res.json(seller_t)
 })
 
-app.get("/admin/seller",async (req,res)=>{
+app.get("/seller",async (req,res)=>{
   const seller = await Seller.find({})
   res.json(seller)
 })
+
+
+// Seller profile
+app.post('/seller/:id/sellerprofile', async(req,res)=>{
+  const sellerprofile = new SellerProfile({...req.body,sellerId: req.params.id})
+  const profile = await sellerprofile.save()
+  res.json(profile)
+})
+
+
+app.get('/seller/:id/sellerprofile', async(req,res)=>{
+  const sellerprofile = await SellerProfile.find({sellerId: req.params.id})
+  res.json(sellerprofile) 
+})
+
 app.listen(5000);
