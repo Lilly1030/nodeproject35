@@ -35,16 +35,151 @@ components:
       properties:
         id:
           type: integer
-          description: The auto-generated id of the student.
+          description: The auto-generated id of the CATEGOEY.
         Name:
           type: string
           description: The name of the brand.
         Category:
-          type: string
-          description: Brand category
+          type: integer
+          description: Brand category id
         
       example:
         Name: Boat
-        Category: Headphones
+        Category:  id of Category
+    sellerprofile:
+      type: object
+      required:
+        - sellerId
+        - firstName
+        - lastName
+        - PhNo
+        - city
+        - address
+        
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the CATEGORY.
+        sellerId:
+          type: integer
+          description: The id of the seller .
+        firstName:
+          type: string
+          description: firstName of seller
+        lastName:
+          type: string
+          description: lastName of seller
+        PhNo:
+          type: integer
+          description: phone number of seller
+        city:
+          type: string
+          description: city of seller
+        address:
+          type: string 
+          description: address of seller
+      example:
+        sellerId: Boat
+        firstName:  Madhesh Eletronics
+        lastName: Pvt Limited
+        PhNo: 7798675432
+        city: Palakol
+        address: Opposite Axis Bank road
     
+      
+    category:
+      type: object  
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the category.
+        Name:
+          type: string
+          description: The type of product in category.
+        
+      example:
+        Name: mobilephone  
+
+    HeadphonesFeatues:
+      type: object
+      required:
+        - Color
+        - ConnectorType
+        
+      properties:
+        CategoryID:
+          type: integer
+          description: The auto-generated id of the CATEGOEY.
+        Color:
+          type: string
+          description: The colour of product.
+        ConnectorType:
+          type: string
+          description: ConnectorType of headphones
+        
+      example:
+        CategoryId:  id of Category
+        Color: Green
+        ConnectorType: wireless   
+     
+    seller:
+      type: object
+      required:
+        - email
+        - sellername
+        - password
+        - gst
+        
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the product.
+        email:
+          type: string
+          description: The email of the seller .
+        sellername:
+          type: string
+          description: The name of the seller 
+        Brand:
+          type: string
+          description: The name of company the product belongs to 
+        gst:
+          type: string
+          description: The C&SGSTs on the product
+        
+      example:
+        Name: boAt Rockerz 450 
+        Category: Headphones
+        Brand: Boat
+        gst: 12%
+    user:
+      type: object
+      required:
+        - email
+        - username
+        - password
+        
+        
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the product.
+        email:
+          type: string
+          description: The email of the User .
+        username:
+          type: string
+          description: The name of the user 
+        password:
+          type: string
+          description: The password that the user uses for login 
+        
+        
+      example:
+        email: ncshfv@gmail.com 
+        username: Lilly
+        password: Lilly890  
+    
+
+
     
