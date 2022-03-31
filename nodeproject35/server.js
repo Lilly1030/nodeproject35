@@ -44,19 +44,19 @@ app.get("/user",async (req,res)=>{
 })
 
 //Category
-app.post("/category",async (req,res)=>{
+app.post("/categories",async (req,res)=>{
     const category = new Category(req.body)
     const cate = await category.save()
     res.json(cate)
 })
 
-app.get("/category",async (req,res)=>{
+app.get("/categories",async (req,res)=>{
   const cat = await Category.find({})
   cat_json= JSON.stringify(cat)
   res.json(cat)
 })
 
-app.get('/category/:id', async (req,res)=>{
+app.get('/categories/:id', async (req,res)=>{
     const cat = await Category.findById({"_id": req.params.id})
     res.json(cat)
 })
@@ -70,8 +70,18 @@ app.post("/brands", async (req,res)=>{
 })
 app.get("/brands", async (req,res)=>{
   const bran = await Brand.find({})
-  const b = JSON.stringify(bran)
-  res.json(b)
+  // const b = JSON.stringify(bran)
+  res.json(bran)
+})
+
+
+// Brands for Categories
+
+
+app.get("/categories/:id/brands", async (req,res)=>{
+  const bran = await Brand.find({Category: req.params.id})
+  // const b = JSON.stringify(bran)
+  res.json(bran)
 })
 
 //Profile
@@ -102,27 +112,27 @@ app.post("/user/:id/userprofile",async (req,res)=>{
 
 
 //Seller
-app.post("/seller",async (req,res)=>{
+app.post("/sellers",async (req,res)=>{
   const seller_temp= new Seller(req.body)
   const seller_t = await seller_temp.save()
   res.json(seller_t)
 })
 
-app.get("/seller",async (req,res)=>{
+app.get("/sellers",async (req,res)=>{
   const seller = await Seller.find({})
   res.json(seller)
 })
 
 
 // Seller profile
-app.post('/seller/:id/sellerprofile', async(req,res)=>{
+app.post('/sellers/:id/sellerprofile', async(req,res)=>{
   const sellerprofile = new SellerProfile({...req.body,sellerId: req.params.id})
   const profile = await sellerprofile.save()
   res.json(profile)
 })
 
 
-app.get('/seller/:id/sellerprofile', async(req,res)=>{
+app.get('/sellers/:id/sellerprofile', async(req,res)=>{
   const sellerprofile = await SellerProfile.find({sellerId: req.params.id})
   res.json(sellerprofile) 
 })
@@ -171,5 +181,8 @@ app.get('/product/upload',async(req,res)=>{
   const img = await Image.find({})
   res.json(img)
 })
+
+
+
 
 app.listen(5000);
