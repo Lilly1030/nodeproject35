@@ -1,12 +1,15 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const multer = require('multer')
 const Category = require('./models/category')
 const User = require('./models/User')
 const UserProfile = require('./models/UserProfile')
 const Seller = require('./models/Seller')
 const Brand = require('./models/brand')
 const SellerProfile = require('./models/SellerProfile')
+const Image = require('./models/Image')
+const Product = require('./models/product')
 
 app.use(express.json())
 
@@ -21,6 +24,17 @@ db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function () {
   console.log("Connected successfully");
 });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads')
+  },
+  filename : (req, file, cb) => {
+    cb(null, file.originalname)
+  }
+})
+const upload = multer({storage: storage}).single('testimage')
+
 
 //User
 app.get("/user",async (req,res)=>{
@@ -111,6 +125,51 @@ app.post('/seller/:id/sellerprofile', async(req,res)=>{
 app.get('/seller/:id/sellerprofile', async(req,res)=>{
   const sellerprofile = await SellerProfile.find({sellerId: req.params.id})
   res.json(sellerprofile) 
+})
+
+
+// Product
+
+// app.post('/seller/:id/product', async(req,res)=>{
+//   const product = new Product({
+
+//   })
+// })
+
+
+//Image Upload
+
+app.post('/product/upload',async(req, res)=>{
+   upload(req, res, (err)=>{
+    if(err){
+      console.log(err)
+    }
+    else{
+      // const newProduct = newProduct(req.body)
+
+
+      const newImage = new Image({
+        name : req.body.name,
+        image: {
+          data: req.file.filename,
+          contentType: 'image/png'
+        }
+      })
+      newImage.save().then(()=>{
+        res.json(newImage)
+      })
+      // const product = Product.find({"_id":req.params.id})
+      // product.images.push(img._id)
+      // product.save(done)
+      // res.json(img)
+    }
+  })
+})
+
+app.get('/product/upload',async(req,res)=>{
+  // const product = Product.find({"_id":req.params.id}).populate(Image)
+  const img = await Image.find({})
+  res.json(img)
 })
 
 app.listen(5000);
