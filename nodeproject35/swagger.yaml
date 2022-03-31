@@ -1,0 +1,50 @@
+openapi : 3.0.0
+info:
+    title: 'BlogsPage API'
+    version: '1.0.0'
+    description: 'This is the documentation for the project'
+
+servers: 
+    - url : http://localhost:5000
+
+tags:
+  - name: Dream Basket
+    description: API to manage e-commerce
+
+paths:
+  /brands:
+    get:
+      summary: List of all brands
+      tags: [brand]
+      responses:
+        "200":
+          description: The list of brands.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/brand'
+
+components:
+  schemas:
+    brand:
+      type: object
+      required:
+        - Name
+        - Category
+        
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the student.
+        Name:
+          type: string
+          description: The name of the brand.
+        Category:
+          type: string
+          description: Brand category
+        
+      example:
+        Name: Boat
+        Category: Headphones
+    
+    

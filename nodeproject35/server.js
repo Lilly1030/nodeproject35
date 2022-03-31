@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const multer = require('multer')
 const Category = require('./models/category')
 const User = require('./models/User')
+
 const UserProfile = require('./models/UserProfile')
 const Seller = require('./models/Seller')
 const Brand = require('./models/brand')
@@ -11,9 +12,17 @@ const SellerProfile = require('./models/SellerProfile')
 const Image = require('./models/Image')
 const Product = require('./models/product')
 
+const swaggerUi = require('swagger-ui-express')
+const YAML = require('yamljs')
+const swaggerDocument = YAML.load('./swagger.yaml')
+
 app.use(express.json())
 
-
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
 mongoose.connect("mongodb+srv://madhesh:dobOct2001@cluster0.exwrl.mongodb.net/dreambasket?retryWrites=true&w=majority",{
     useNewUrlParser: true,
