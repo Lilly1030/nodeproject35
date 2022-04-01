@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const mongoose = require('mongoose');
 const multer = require('multer')
 const Category = require('./models/category')
@@ -20,6 +21,7 @@ const YAML = require('yamljs')
 const swaggerDocument = YAML.load('./swagger.yaml')
 
 app.use(express.json())
+app.use(cors());
 
 app.use(
   "/api-docs",
@@ -49,9 +51,16 @@ const upload = multer({storage: storage}).single('testimage')
 
 
 //User
-app.get("/user",async (req,res)=>{
+app.get("/users",cors(),async (req,res)=>{
   const user = await User.find({})
   user_json= JSON.stringify(user)
+  res.json(user)
+})
+
+app.post("/users",cors(),async (req,res)=>{
+
+  const newUser = new User(req.body)
+  const user = await newUser.save()
   res.json(user)
 })
 
@@ -125,13 +134,15 @@ app.post("/user/:id/userprofile",async (req,res)=>{
 
 
 //Seller
-app.post("/sellers",async (req,res)=>{
+app.post("/sellers",cors(),async (req,res)=>{
+  
+  console.log(req.body);
   const seller_temp= new Seller(req.body)
   const seller_t = await seller_temp.save()
   res.json(seller_t)
 })
 
-app.get("/sellers",async (req,res)=>{
+app.get("/sellers",cors(),async (req,res)=>{
   const seller = await Seller.find({})
   res.json(seller)
 })
@@ -150,6 +161,7 @@ app.post('/sellers/:id/sellerprofile', async(req,res)=>{
 
 
 app.get('/sellers/:id/sellerprofile', async(req,res)=>{
+
   const sellerprofile = await SellerProfile.find({sellerId: req.params.id})
   res.json(sellerprofile) 
 })
@@ -227,4 +239,6 @@ app.get('/product/upload',async(req,res)=>{
 
 
 
-app.listen(5000);
+app.listen(5000,()=>{
+  console.log("listening......")
+});
