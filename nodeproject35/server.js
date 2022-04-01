@@ -65,31 +65,31 @@ app.post("/users",cors(),async (req,res)=>{
 })
 
 //Category
-app.post("/categories",async (req,res)=>{
+app.post("/categories",cors(),async (req,res)=>{
     const category = new Category(req.body)
     const cate = await category.save()
     res.json(cate)
 })
 
-app.get("/categories",async (req,res)=>{
+app.get("/categories",cors(),async (req,res)=>{
   const cat = await Category.find({})
   cat_json= JSON.stringify(cat)
   res.json(cat)
 })
 
-app.get('/categories/:id', async (req,res)=>{
+app.get('/categories/:id',cors(), async (req,res)=>{
     const cat = await Category.findById({"_id": req.params.id})
     res.json(cat)
 })
 
 //Brand
 
-app.post("/brands", async (req,res)=>{
+app.post("/brands",cors(), async (req,res)=>{
   const bran = new Brand(req.body)
   const b = await bran.save()
   res.json(b)
 })
-app.get("/brands", async (req,res)=>{
+app.get("/brands",cors(), async (req,res)=>{
   const bran = await Brand.find({})
   // const b = JSON.stringify(bran)
   res.json(bran)
@@ -99,14 +99,14 @@ app.get("/brands", async (req,res)=>{
 // Brands for Categories
 
 
-app.get("/categories/:id/brands", async (req,res)=>{
+app.get("/categories/:id/brands",cors(), async (req,res)=>{
   const bran = await Brand.find({Category: req.params.id})
   // const b = JSON.stringify(bran)
   res.json(bran)
 })
 
 //Profile
-app.get("/user/:id/userProfile",async (req,res)=>
+app.get("/user/:id/userProfile",cors(),async (req,res)=>
 {
   const userProfile = await UserProfile.find({userId: req.params.id})
   // const userProf= JSON.stringify(userProfile)
@@ -115,7 +115,7 @@ app.get("/user/:id/userProfile",async (req,res)=>
 
 
 
-app.post("/user/:id/userprofile",async (req,res)=>{
+app.post("/user/:id/userprofile",cors(),async (req,res)=>{
 
   const userprofile= new UserProfile({...req.body,userId: req.params.id})
   const profile = await userprofile.save()
