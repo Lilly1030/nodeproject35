@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const headphonesFeatureSchema = new mongoose.Schema({
+const HeadphonesFeatureSchema = new mongoose.Schema({
     categoryID:{
         type: mongoose.Schema.Types.ObjectID,
         ref: 'Category'
@@ -15,4 +15,4 @@ const headphonesFeatureSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('HeadphonesFeatureFeature',HeadphonesFeatureSchema)
+module.exports = mongoose.model('HeadphonesFeature',HeadphonesFeatureSchema)

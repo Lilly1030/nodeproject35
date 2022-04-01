@@ -12,6 +12,9 @@ const SellerProfile = require('./models/SellerProfile')
 const Image = require('./models/Image')
 const Product = require('./models/product')
 
+const MobileFeature = require('./models/MobileFeature')
+const LaptopFeature = require('./models/LaptopFeature')
+const HeadphonesFeature = require('./models/HeadphonesFeature')
 const swaggerUi = require('swagger-ui-express')
 const YAML = require('yamljs')
 const swaggerDocument = YAML.load('./swagger.yaml')
@@ -102,6 +105,7 @@ app.get("/user/:id/userProfile",async (req,res)=>
 })
 
 
+
 app.post("/user/:id/userprofile",async (req,res)=>{
 
   const userprofile= new UserProfile({...req.body,userId: req.params.id})
@@ -132,6 +136,10 @@ app.get("/sellers",async (req,res)=>{
   res.json(seller)
 })
 
+app.get("/sellers/:id", async(req,res)=>{
+  const seller = await Seller.findById({ "_id": req.params.id})
+})
+
 
 // Seller profile
 app.post('/sellers/:id/sellerprofile', async(req,res)=>{
@@ -144,6 +152,31 @@ app.post('/sellers/:id/sellerprofile', async(req,res)=>{
 app.get('/sellers/:id/sellerprofile', async(req,res)=>{
   const sellerprofile = await SellerProfile.find({sellerId: req.params.id})
   res.json(sellerprofile) 
+})
+
+//MobileFeatures
+
+app.post('/mobilefeatures',async(req,res)=>{
+  const mf = new MobileFeature(req.body)
+  const mf1 = await mf.save()
+  res.json(mf1)
+})
+
+app.get('/mobilefeatures', async(req,res)=>{
+  const mobilef = await MobileFeature.find({})
+  res.json(mobilef)
+})
+
+//LaptopFeatures
+app.post('/laptopfeatures',async(req,res)=>{
+  const lf = new LaptopFeature(req.body)
+  const lf1 = await lf.save()
+  res.json(lf1)
+})
+
+app.get('/laptopfeatures', async(req,res)=>{
+  const lapf = await LaptopFeature.find({})
+  res.json(lapf)
 })
 
 
