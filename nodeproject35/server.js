@@ -95,7 +95,10 @@ app.get("/brands",cors(), async (req,res)=>{
   res.json(bran)
 })
 
-
+app.get('/brands/:id',cors(), async (req,res)=>{
+  const brand_id = await Brand.findById({"_id": req.params.id})
+  res.json(brand_id)
+})
 // Brands for Categories
 
 
@@ -191,14 +194,20 @@ app.get('/laptopfeatures',cors(), async(req,res)=>{
   res.json(lapf)
 })
 
+//Headphonefeatures
+app.post('/headphonefeatures',cors(), async(req,res)=>{
+  const hf = new HeadphoneFeature(req.body)
+  const hf1 = await hf.save()
+  res.json(hf1)
+})
+
+app.get('/headphonefeatures',cors(), async(req,res)=>{
+  const heaf = await HeadphoneFeature.find({})
+  res.json(heaf)
+})
+
 
 // Product
-
-// app.post('/seller/:id/product', async(req,res)=>{
-//   const product = new Product({
-
-//   })
-// })
 
 
 //Image Upload
