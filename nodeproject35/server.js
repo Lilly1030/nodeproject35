@@ -147,20 +147,20 @@ app.get("/sellers",cors(),async (req,res)=>{
   res.json(seller)
 })
 
-app.get("/sellers/:id", async(req,res)=>{
+app.get("/sellers/:id",cors(), async(req,res)=>{
   const seller = await Seller.findById({ "_id": req.params.id})
 })
 
 
 // Seller profile
-app.post('/sellers/:id/sellerprofile', async(req,res)=>{
+app.post('/sellers/:id/sellerprofile',cors(), async(req,res)=>{
   const sellerprofile = new SellerProfile({...req.body,sellerId: req.params.id})
   const profile = await sellerprofile.save()
   res.json(profile)
 })
 
 
-app.get('/sellers/:id/sellerprofile', async(req,res)=>{
+app.get('/sellers/:id/sellerprofile',cors(), async(req,res)=>{
 
   const sellerprofile = await SellerProfile.find({sellerId: req.params.id})
   res.json(sellerprofile) 
@@ -168,25 +168,25 @@ app.get('/sellers/:id/sellerprofile', async(req,res)=>{
 
 //MobileFeatures
 
-app.post('/mobilefeatures',async(req,res)=>{
+app.post('/mobilefeatures',cors(),async(req,res)=>{
   const mf = new MobileFeature(req.body)
   const mf1 = await mf.save()
   res.json(mf1)
 })
 
-app.get('/mobilefeatures', async(req,res)=>{
+app.get('/mobilefeatures',cors(), async(req,res)=>{
   const mobilef = await MobileFeature.find({})
   res.json(mobilef)
 })
 
 //LaptopFeatures
-app.post('/laptopfeatures',async(req,res)=>{
+app.post('/laptopfeatures',cors(),async(req,res)=>{
   const lf = new LaptopFeature(req.body)
   const lf1 = await lf.save()
   res.json(lf1)
 })
 
-app.get('/laptopfeatures', async(req,res)=>{
+app.get('/laptopfeatures',cors(), async(req,res)=>{
   const lapf = await LaptopFeature.find({})
   res.json(lapf)
 })
@@ -203,7 +203,7 @@ app.get('/laptopfeatures', async(req,res)=>{
 
 //Image Upload
 
-app.post('/product/upload',async(req, res)=>{
+app.post('/product/upload',cors(),async(req, res)=>{
    upload(req, res, (err)=>{
     if(err){
       console.log(err)
@@ -230,7 +230,7 @@ app.post('/product/upload',async(req, res)=>{
   })
 })
 
-app.get('/product/upload',async(req,res)=>{
+app.get('/product/upload',cors(),async(req,res)=>{
   // const product = Product.find({"_id":req.params.id}).populate(Image)
   const img = await Image.find({})
   res.json(img)
