@@ -32,7 +32,12 @@ app.use(
 mongoose.connect("mongodb+srv://madhesh:dobOct2001@cluster0.exwrl.mongodb.net/dreambasket?retryWrites=true&w=majority",{
     useNewUrlParser: true,
   })
-
+mongoose.set('toJSON',{
+  virtuals: true,
+  transform: (doc,converted)=> {
+    delete converted._id;
+  }
+})
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function () {
@@ -73,7 +78,8 @@ app.post("/categories",cors(),async (req,res)=>{
 
 app.get("/categories",cors(),async (req,res)=>{
   const cat = await Category.find({})
-  cat_json= JSON.stringify(cat)
+  
+  res.header('Content-Range','category 0-20/20')
   res.json(cat)
 })
 
@@ -121,7 +127,7 @@ app.get("/user/:id/userProfile",cors(),async (req,res)=>
 app.post("/user/:id/userprofile",cors(),async (req,res)=>{
 
   const userprofile= new UserProfile({...req.body,userId: req.params.id})
-  const profile = await userprofile.save()
+  const profile= await userprofile.save()
   res.json(profile)
 })
 
@@ -131,10 +137,6 @@ app.post("/user/:id/userprofile",cors(),async (req,res)=>{
 //   // const userProf= JSON.stringify(userProfile)
 //   res.json(userProfile)
 // })
-
-
-
-
 
 //Seller
 app.post("/sellers",cors(),async (req,res)=>{
