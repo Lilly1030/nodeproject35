@@ -13,11 +13,12 @@ const SellerProfile = require('./models/SellerProfile')
 const Image = require('./models/Image')
 const Product = require('./models/product')
 
-const MobileFeature = require('./models/MobileFeature')
-const LaptopFeature = require('./models/LaptopFeature')
-const HeadphonesFeature = require('./models/HeadphonesFeature')
+// const MobileFeature = require('./models/MobileFeature')
+// const LaptopFeature = require('./models/LaptopFeature')
+// const HeadphonesFeature = require('./models/HeadphonesFeature')
 const swaggerUi = require('swagger-ui-express')
-const YAML = require('yamljs')
+const YAML = require('yamljs');
+const product = require('./models/product');
 const swaggerDocument = YAML.load('./swagger.yaml')
 
 app.use(express.json())
@@ -59,6 +60,7 @@ const upload = multer({storage: storage}).single('testimage')
 app.get("/users",cors(),async (req,res)=>{
   const user = await User.find({})
   user_json= JSON.stringify(user)
+  res.header('Content-Range','user 0-20/20')
   res.json(user)
 })
 
@@ -98,6 +100,7 @@ app.post("/brands",cors(), async (req,res)=>{
 app.get("/brands",cors(), async (req,res)=>{
   const bran = await Brand.find({})
   // const b = JSON.stringify(bran)
+  res.header('Content-Range','brands 0-20/20')
   res.json(bran)
 })
 
@@ -148,7 +151,9 @@ app.post("/sellers",cors(),async (req,res)=>{
 })
 
 app.get("/sellers",cors(),async (req,res)=>{
+  
   const seller = await Seller.find({})
+  res.header('Content-Range','sellers 0-20/20')
   res.json(seller)
 })
 
@@ -171,45 +176,68 @@ app.get('/sellers/:id/sellerprofile',cors(), async(req,res)=>{
   res.json(sellerprofile) 
 })
 
-//MobileFeatures
+// Features of a category
+app.get('/categories/:id/features',cors(), (req,res)=>{
 
-app.post('/mobilefeatures',cors(),async(req,res)=>{
-  const mf = new MobileFeature(req.body)
-  const mf1 = await mf.save()
-  res.json(mf1)
+  var query = { cid: req.params.id };
+  db.collection("features").find(query).toArray(function(err, result) {
+    if (err) throw err;
+    res.json(result);
+    //db.close();
+  });
+
+  // const feature = await Brand.find({Category: req.params.id})
+  // res.json(bran)
+
+  // const mobilef = await MobileFeature.find({})
+  // res.json(mobilef)
 })
 
-app.get('/mobilefeatures',cors(), async(req,res)=>{
-  const mobilef = await MobileFeature.find({})
-  res.json(mobilef)
-})
+
+// app.post('/mobilefeatures',cors(),async(req,res)=>{
+//   const mf = new MobileFeature(req.body)
+//   const mf1 = await mf.save()
+//   res.json(mf1)
+// })
+
+// app.get('/mobilefeatures',cors(), async(req,res)=>{
+//   const mobilef = await MobileFeature.find({})
+//   res.json(mobilef)
+// })
 
 //LaptopFeatures
-app.post('/laptopfeatures',cors(),async(req,res)=>{
-  const lf = new LaptopFeature(req.body)
-  const lf1 = await lf.save()
-  res.json(lf1)
-})
+// app.post('/laptopfeatures',cors(),async(req,res)=>{
+//   const lf = new LaptopFeature(req.body)
+//   const lf1 = await lf.save()
+//   res.json(lf1)
+// })
 
-app.get('/laptopfeatures',cors(), async(req,res)=>{
-  const lapf = await LaptopFeature.find({})
-  res.json(lapf)
-})
+// app.get('/laptopfeatures',cors(), async(req,res)=>{
+//   const lapf = await LaptopFeature.find({})
+//   res.json(lapf)
+// })
 
 //Headphonefeatures
-app.post('/headphonefeatures',cors(), async(req,res)=>{
-  const hf = new HeadphoneFeature(req.body)
-  const hf1 = await hf.save()
-  res.json(hf1)
-})
+// app.post('/headphonefeatures',cors(), async(req,res)=>{
+//   const hf = new HeadphoneFeature(req.body)
+//   const hf1 = await hf.save()
+//   res.json(hf1)
+// })
 
-app.get('/headphonefeatures',cors(), async(req,res)=>{
-  const heaf = await HeadphoneFeature.find({})
-  res.json(heaf)
-})
+// app.get('/headphonefeatures',cors(), async(req,res)=>{
+//   const heaf = await HeadphoneFeature.find({})
+//   res.json(heaf)
+// })
 
 
 // Product
+
+app.post("/sellerproduct",cors(),async (req,res)=>{
+
+  const newProduct= new Product(req.body)
+  const product= await newProduct.save()
+  res.json(product)
+})
 
 
 //Image Upload
@@ -246,9 +274,6 @@ app.get('/product/upload',cors(),async(req,res)=>{
   const img = await Image.find({})
   res.json(img)
 })
-
-
-
 
 app.listen(5000,()=>{
   console.log("listening......")

@@ -2,42 +2,48 @@ const mongoose = require("mongoose");
 
 const ProductSchema = new mongoose.Schema(
   {
-      
-    
-      Name :{
+
+    sellerId: {
+        type: String
+    }, 
+    sellername:{
+        type:String
+    },  
+    productname :{
           type:String
+    },
+    productbrand : {
+        type: String
+        
       },
-      Category : {
-         type: mongoose.Schema.Types.ObjectID,
-         ref: 'Category'
-
-      },
-      Brand : {
-        type: mongoose.Schema.Types.ObjectID,
-        ref: 'Brand'
-      },
-      Images : [{type: mongoose.Schema.Types.ObjectId, ref:'Image'}],
-      Price: {
-          type: Number,
-          required: true,
-          min: 1
-      },
-      FeatureId: {
-          type: String,
-          required: true
-      },
-      sellerId: {
-          type: mongoose.Schema.Types.ObjectID,
-          ref: 'Seller'
-      },
-      Quantity: {
-          type: Number,
-          required: true,
-          min: 1
-      }
-
-      
+      productprice: {
+        type: Number,
+        required: true,
+        min: 1
+    },
     
+    ram:{
+        type:Number
+    },
+    storage:{
+        type:String
+    },
+    color:{
+        type:String
+    },
+    connectorType:{
+        type:String
+    },
+    productquantity: {
+        type: Number,
+        required: true,
+        min: 1
+    },
+      
+      Category : {
+         type: String
+      },
+      //Images : [{type: mongoose.Schema.Types.ObjectId, ref:'Image'}], 
   },
   { timestamps: true }
 );
