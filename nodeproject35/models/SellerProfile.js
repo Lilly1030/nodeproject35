@@ -5,19 +5,17 @@ const sellerProfileSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref : 'Seller'
     },
-    firstName:{
+    sellername: {
         type: String,
         required: true
     },
-    lastName: {
+    sellerfirstname:{
         type: String,
         required: true
     },
-    PhNo: {
-        type: Number,
-        required: true,
-        minlength: 10,
-        maxLength: 10,
+    sellerlastname: {
+        type: String,
+        required: true
     },
     city: {
         type: String,
