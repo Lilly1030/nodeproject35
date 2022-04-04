@@ -83,7 +83,7 @@ paths:
       responses:
         "200":
           description: successs
-  /user:
+  /users:
     get:
       summary: List of all users
       tags: [user]
@@ -93,7 +93,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/user'
+                $ref: '#/components/schemas/users'
   /sellers:
     get:
       summary: List of all sellers
@@ -184,87 +184,6 @@ components:
       example:
         Name: mobilephone  
 
-    HeadphonesFeatues:
-      type: object
-      required:
-        - Color
-        - ConnectorType
-        
-      properties:
-        CategoryID:
-          type: integer
-          description: The auto-generated id of the CATEGOEY.
-        Color:
-          type: string
-          description: The colour of product.
-        ConnectorType:
-          type: string
-          description: ConnectorType of headphones
-        
-      example:
-        CategoryId:  id of Category
-        Color: Green
-        ConnectorType: wireless   
-    MobileFeatues:
-      type: object
-      required:
-        - RAM
-        - Storage
-        - Color
-        
-        
-      properties:
-        CategoryID:
-          type: integer
-          description: The auto-generated id of the CATEGOEY.
-        RAM:
-          type: string
-          description: RAM of mobilephone
-        Storage:
-          type: string
-          description: The Storge of product(64 GB).
-
-        Color:
-          type: string
-          description: The colour of product.
-
-        
-      example:
-        CategoryId:  id of Category
-        RAM: 4GB
-        Storage: 64GB
-        Color: Green
-    
-    LaptopFeatues:
-      type: object
-      required:
-        - RAM
-        - Storage
-        - Color
-        
-        
-      properties:
-        CategoryID:
-          type: integer
-          description: The auto-generated id of the CATEGOEY.
-        RAM:
-          type: string
-          description: RAM of Laptop
-        Storage:
-          type: string
-          description: The Storge of laptop(512GB).
-
-        Color:
-          type: string
-          description: The colour of laptop.
-
-        
-      example:
-        CategoryId:  id of Category
-        RAM: 8GB
-        Storage: 1TB HDD
-        Color: Green
-
      
     seller:
       type: object
@@ -296,7 +215,7 @@ components:
         Category: Headphones
         Brand: Boat
         gst: 12%
-    user:
+    users:
       type: object
       required:
         - email
@@ -323,6 +242,88 @@ components:
         email: ncshfv@gmail.com 
         username: Lilly
         password: Lilly890  
+    cart:
+      type: object
+      required:
+        - userId
+        - cid
+        - pid
+        - sellerId
+        - sellername
+        - productname
+        - productbrand
+        - productprice
+        - ram
+        - storage
+        - color
+        - connectorType
+        - productquantity
+        - qty
+        
+        
+      properties:
+        id:
+          type: integer
+          description: The auto-generated id of the product.
+        userId:
+          type: string
+          description: The ID of  the user .
+        cid:
+          type: string
+          description: The ID of  the category .
+        pid:
+          type: string
+          description: The ID of  the product .
+        sellerId:
+          type: string
+          description: The ID of  the seller .
+        sellername:
+          type: string
+          description: The name of the seller
+        productname:
+          type: string
+          description: The name of the product.
+        productbrand:
+          type: string
+          description: The brand of the product.
+        productprice:
+          type: number
+          description: The product of the price.
+        ram:
+          type: string
+          description: The ram of the product.
+        storage:
+          type: string
+          description: The storage capacity of the product .
+        color:
+          type: string
+          description: The color of the product.
+        connectortype:
+          type: string
+          description: The connectortype of the product.
+        productquantity:
+          type: number
+          description: The  available quantity of the product from the seller.
+        qty:
+          type: number
+          description: The quantity of the product user wanna buy.
+        
+        
+      # example:
+      #  userId 
+      #  cid
+      #  pid
+      #  sellerId
+      #  sellername
+      #  productname
+      #  productbrand
+      #  productprice
+      #  ram
+      #  storage
+      #  color
+      #  connectorType
+      #  productquantity
+      #  qty  
     
 
 

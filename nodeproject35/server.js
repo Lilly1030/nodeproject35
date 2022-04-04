@@ -12,6 +12,8 @@ const Brand = require('./models/brand')
 const SellerProfile = require('./models/SellerProfile')
 const Image = require('./models/Image')
 const Product = require('./models/product')
+const Cart = require('./models/Cart')
+const UserOrders = require('./models/UserOrders')
 
 // const MobileFeature = require('./models/MobileFeature')
 // const LaptopFeature = require('./models/LaptopFeature')
@@ -118,7 +120,7 @@ app.get("/categories/:id/brands",cors(), async (req,res)=>{
 })
 
 //Profile
-app.get("/user/:id/userProfile",cors(),async (req,res)=>
+app.get("/user/:id/userprofile",cors(),async (req,res)=>
 {
   const userProfile = await UserProfile.find({userId: req.params.id})
   // const userProf= JSON.stringify(userProfile)
@@ -127,19 +129,15 @@ app.get("/user/:id/userProfile",cors(),async (req,res)=>
 
 
 
-app.post("/user/:id/userprofile",cors(),async (req,res)=>{
+
+
+app.post("/users/:id/userprofile",cors(),async (req,res)=>{
 
   const userprofile= new UserProfile({...req.body,userId: req.params.id})
   const profile= await userprofile.save()
   res.json(profile)
 })
 
-// app.get("/user/:id/useraddress",async (req,res)=>
-// {
-//   const userProfile = await UserProfile.find({})
-//   // const userProf= JSON.stringify(userProfile)
-//   res.json(userProfile)
-// })
 
 //Seller
 app.post("/sellers",cors(),async (req,res)=>{
@@ -186,57 +184,39 @@ app.get('/categories/:id/features',cors(), (req,res)=>{
     //db.close();
   });
 
-  // const feature = await Brand.find({Category: req.params.id})
-  // res.json(bran)
-
-  // const mobilef = await MobileFeature.find({})
-  // res.json(mobilef)
+  
 })
 
 
-// app.post('/mobilefeatures',cors(),async(req,res)=>{
-//   const mf = new MobileFeature(req.body)
-//   const mf1 = await mf.save()
-//   res.json(mf1)
-// })
-
-// app.get('/mobilefeatures',cors(), async(req,res)=>{
-//   const mobilef = await MobileFeature.find({})
-//   res.json(mobilef)
-// })
-
-//LaptopFeatures
-// app.post('/laptopfeatures',cors(),async(req,res)=>{
-//   const lf = new LaptopFeature(req.body)
-//   const lf1 = await lf.save()
-//   res.json(lf1)
-// })
-
-// app.get('/laptopfeatures',cors(), async(req,res)=>{
-//   const lapf = await LaptopFeature.find({})
-//   res.json(lapf)
-// })
-
-//Headphonefeatures
-// app.post('/headphonefeatures',cors(), async(req,res)=>{
-//   const hf = new HeadphoneFeature(req.body)
-//   const hf1 = await hf.save()
-//   res.json(hf1)
-// })
-
-// app.get('/headphonefeatures',cors(), async(req,res)=>{
-//   const heaf = await HeadphoneFeature.find({})
-//   res.json(heaf)
-// })
-
-
 // Product
+
+app.get('/sellerproduct',cors(),async(req,res)=>{
+  const products = await Product.find({})
+  res.json(products)
+})
+
 
 app.post("/sellerproduct",cors(),async (req,res)=>{
 
   const newProduct= new Product(req.body)
   const product= await newProduct.save()
   res.json(product)
+})
+
+app.get('/categories/:cid/sellerproduct',cors(), async(req,res)=>{
+  const products = await Product.find({"Category": req.params.cid})
+  res.json(products)
+})
+
+app.get('/categories/:cid/brands/:brandname/sellerproduct',cors(),async(req,res)=>{
+  try{
+    const products= await Product.find({Category:req.params.cid, productbrand: req.params.brandname})
+    res.json(products)
+  }
+  catch(err){
+    console.log(err)
+  }
+  
 })
 
 
@@ -274,6 +254,106 @@ app.get('/product/upload',cors(),async(req,res)=>{
   const img = await Image.find({})
   res.json(img)
 })
+
+
+//Cart
+
+app.get('/cart',cors(),async(req,res)=>{
+  let cartItems = await Cart.find({})
+  res.json(cartItems)
+})
+
+app.delete('/cart',cors(),async(req,res)=>{
+  const cartItems = await Cart.deleteMany()
+})
+
+app.get('/users/:id/cart',cors(),async(req,res)=>{
+  const cartItems = await Cart.find({userId: req.params.id})
+  console.log(cartItems)
+  res.json(cartItems)
+})
+
+app.post('/users/:id/cart',cors(),async(req,res)=>{
+  const newCartItem = await new Cart({...req.body,userId: req.params.id,})
+  const item = newCartItem.save()
+  console.log(item)
+  res.json(newCartItem)
+})
+
+app.get('/users/:id/cart/:cartId',cors(),async(req,res)=>{
+  const cartItem = await Cart.find({_id: req.params.cartId})
+  res.json(cartItem)
+})
+
+app.patch('/users/:id/cart/:cartId',cors(),async(req,res)=>{
+  const cartItem = await Cart.findByIdAndUpdate({_id: req.params.cartId})
+    cartItem.qty = req.body.qty
+  const item = await cartItem.save()
+  res.json(item)
+})
+
+app.delete('/users/:id/cart/:cartId',cors(),async(req,res)=>{
+  // const cartItem = await Cart.findByIdAndRemove({_id: req.params.cartId})
+  // res.json(cartItem)
+  try{
+    const cartItem = await Cart.deleteOne({_id: req.params.cartId})
+    res.json(cartItem)
+  }
+  catch(error){
+    console.log(error)
+  }
+})
+
+
+//User Orders
+
+app.get('/orders',cors(),async(req,res)=>{
+  const orders = await UserOrders.find({})
+  res.json(orders)
+
+})
+
+
+app.post('/users/:id/orders',cors(),async(req,res)=>{
+  const newOrder = await new UserOrders(req.body)
+  const order = await newOrder.save()
+  console.log(order)
+  res.json(order)
+})
+
+app.get('/users/:id/orders',cors(),async(req,res)=>{
+  const orders = await UserOrders.find({userId:req.params.id})
+  res.json(orders)
+
+})
+
+app.delete('/users/:id/orders/:orderId',cors(),async(req,res)=>{
+  const orders = await UserOrders.deleteOne({_id:req.params.orderId})
+  res.json(orders)
+
+})
+
+app.delete('/users/:id/orders',cors(),async(req,res)=>{
+  const orders = await UserOrders.deleteMany({userId:req.params.id})
+  res.json(orders)
+
+})
+
+app.get('/users/:id',cors(),async(req,res)=>{
+  const user = User.find({_id:req.params.id})
+  res.json(user)
+})
+
+
+// Seller Orders
+app.get('/sellers/:id/orders',cors(),async(req,res)=>{
+  const orders = await UserOrders.find({sellerId:req.params.id})
+  res.json(orders)
+
+})
+
+
+
 
 app.listen(5000,()=>{
   console.log("listening......")

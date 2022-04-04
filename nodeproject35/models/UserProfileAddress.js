@@ -17,7 +17,7 @@ const userProfileAddressSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    deliveryAddress:{
+    deliveryAddress:{ 
         type: String,
         required: true
     }

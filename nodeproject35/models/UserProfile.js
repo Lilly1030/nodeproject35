@@ -5,15 +5,19 @@ const userprofileSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    firstName: {
+    userfirstname: {
         type: String,
         required: true
     },
-    lastName: {
+    userlastname: {
+        type: String,
+        required: true
+    }, 
+    city:{
         type: String,
         required: true
     },
-    phNo: {
+    address:{ 
         type: String,
         required: true
     }
