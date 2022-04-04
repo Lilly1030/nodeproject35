@@ -159,6 +159,11 @@ app.get("/sellers/:id",cors(), async(req,res)=>{
   const seller = await Seller.findById({ "_id": req.params.id})
 })
 
+app.delete("/sellers/:id", cors(), async(req,res)=>{
+  const seller = await Seller.findById({"_id": req.params.id})
+  await Seller.deleteOne(seller)
+  res.status(200).json({message: "deleted sucessfully"})
+})
 
 // Seller profile
 app.post('/sellers/:id/sellerprofile',cors(), async(req,res)=>{
@@ -173,6 +178,42 @@ app.get('/sellers/:id/sellerprofile',cors(), async(req,res)=>{
   const sellerprofile = await SellerProfile.find({sellerId: req.params.id})
   res.json(sellerprofile) 
 })
+
+app.patch("/sellerprofile/:id",cors(), async (req,res)=>{
+
+  const sellerprofile = await SellerProfile.findById({"_id":req.params.id})
+
+  if(req.body.firstName != null){
+    sellerprofile.firstName = req.body.firstName
+  }
+  if(req.body.lastName != null){
+    sellerprofile.lastName = req.body.lastName
+  }
+  if(req.body.PhNo != null){
+    sellerprofile.PhNo = req.body.PhNo
+  }
+  if(req.body.city != null){
+    sellerprofile.city = req.body.city
+  }
+  if(req.body.address != null){
+    sellerprofile.address = req.body.address
+  }
+  try{
+      const updatedSeller = await sellerprofile.save()
+      res.status(200).json(updatedSeller)
+  }
+  catch(error){
+      req.status(500).json({message: error.message})
+  }
+ 
+})
+
+app.delete('/sellerprofile/:id', cors(), async(req,res)=>{
+  const sellerprofile = await SellerProfile.findById({"_id": req.params.id})
+  await SellerProfile.deleteOne(sellerprofile)
+  res.status(200).json({message: "deleted!"})
+})
+
 
 // Features of a category
 app.get('/categories/:id/features',cors(), (req,res)=>{
@@ -203,6 +244,49 @@ app.post("/sellerproduct",cors(),async (req,res)=>{
   res.json(product)
 })
 
+app.patch("/sellerproduct/:id",cors(), async (req,res)=>{
+
+
+  const sellerproduct = await Product.findById({"_id":req.params.id})
+
+  if(req.body.sellername != null){
+    sellerproduct.sellername = req.body.sellername
+  }
+  if(req.body.productname != null){
+    sellerproduct.productname = req.body.productname
+  }
+  if(req.body.productbrand != null){
+    sellerproduct.productbrand = req.body.productbrand
+  }
+  if(req.body.productprice != null){
+    sellerproduct.productprice = req.body.productprice
+  }
+  if(req.body.color != null){
+    sellerproduct.color = req.body.color
+  }
+  if(req.body.connectorType != null){
+    sellerproduct.connectorType = req.body.connectorType
+  }
+  if(req.body.productquantity != null){
+    sellerproduct.productquantity = req.body.productquantity
+  }
+  try{
+      const updatedProduct = await sellerproduct.save()
+      res.status(200).json(updatedProduct)
+  }
+  catch(error){
+      req.status(500).json({message: error.message})
+  }
+ 
+})
+
+app.delete("/sellerproduct/:id", cors(), async(req,res)=>{
+  const product = await Product.findById({"_id" : req.params.id})
+  await Product.deleteOne(product)
+  res.status(200).json({message: "deleted!"})
+})
+
+
 app.get('/categories/:cid/sellerproduct',cors(), async(req,res)=>{
   const products = await Product.find({"Category": req.params.cid})
   res.json(products)
@@ -218,6 +302,25 @@ app.get('/categories/:cid/brands/:brandname/sellerproduct',cors(),async(req,res)
   }
   
 })
+
+app.delete('/users/:id/sellerproduct/:productId',cors(),async(req,res)=>{
+  try{
+    const productItem = await Product.deleteOne({_id: req.params.productId})
+    res.json(productItem)
+  }
+  catch(error){
+    console.log(error)
+  }
+})
+
+
+app.patch('/users/:id/sellerproduct/:productId',cors(),async(req,res)=>{
+  const productItem = await Product.findByIdAndUpdate({_id: req.params.productId})
+  productItem.productquantity = req.body.productquantity
+  const item = await productItem.save()
+  res.json(item)
+})
+
 
 
 //Image Upload
@@ -309,6 +412,7 @@ app.delete('/users/:id/cart/:cartId',cors(),async(req,res)=>{
 
 app.get('/orders',cors(),async(req,res)=>{
   const orders = await UserOrders.find({})
+  res.header('Content-Range','sellers 0-20/20')
   res.json(orders)
 
 })
@@ -353,6 +457,110 @@ app.get('/sellers/:id/orders',cors(),async(req,res)=>{
 })
 
 
+app.patch("/users/:id",cors(), async (req,res)=>{
+
+  const user = await User.findById(req.params.id)
+
+  if(req.body.username != null){
+      user.username = req.body.username
+  }
+  if(req.body.email != null){
+      user.email = req.body.email
+  }
+  if(req.body.password != null){
+      user.password = req.body.password
+  }
+  try{
+      const updatedUser = await user.save()
+      res.status(200).json(updatedUser)
+  }
+  catch(error){
+      req.status(500).json({message: error.message})
+  }
+ 
+})
+
+app.delete("/users/:id", cors(), async (req,res)=>{
+  const user = await User.findById({"_id": req.params.id})
+  await User.deleteOne(user)
+  res.status(200).json({message: "deleted"})
+})
+
+
+app.delete('/categories/:id', cors(), async (req,res)=>{
+  const cat = await Category.findById({"_id": req.params.id})
+  await Category.deleteOne(cat)
+  res.status(200).json({message: "deleted"})
+})
+
+app.delete('/brands/:id', cors(), async (req,res)=>{
+  const brand_id = await Brand.findById({"_id": req.params.id})
+  await Brand.deleteOne(brand_id)
+  res.status(200).json({message: "deleted"})
+})
+
+app.patch("/userprofile/:id",cors(), async (req,res)=>{
+
+  const userprofile = await UserProfile.findById(req.params.id)
+
+  if(req.body.username != null){
+      userprofile.username = req.body.username
+  }
+  if(req.body.email != null){
+      userprofile.email = req.body.email
+  }
+  if(req.body.password != null){
+      userprofile.password = req.body.password
+  }
+  try{
+      const updatedUser = await userprofile.save()
+      res.status(200).json(updatedUser)
+  }
+  catch(error){
+      req.status(500).json({message: error.message})
+  }
+ 
+})
+
+
+app.delete('/userprofīle/:id', cors(), async (req,res)=>{
+  const userprofile = await UserProfile.findById({"_id": req.params.id})
+  await UserProfile.deleteOne(userprofile)
+  res.status(200).json({message: "deleted"})
+})
+
+app.patch("/userprofile/:id",cors(), async (req,res)=>{
+
+  const userprofile = await UserProfile.findById(req.params.id)
+
+  if(req.body.username != null){
+      userprofile.username = req.body.username
+  }
+  if(req.body.email != null){
+      userprofile.email = req.body.email
+  }
+  if(req.body.password != null){
+      userprofile.password = req.body.password
+  }
+  try{
+      const updatedUser = await userprofile.save()
+      res.status(200).json(updatedUser)
+  }
+  catch(error){
+      req.status(500).json({message: error.message})
+  }
+ 
+})
+
+
+
+
+
+
+app.delete("/image/:id", cors(), async(req,res)=>{
+  const img = await Image.findById({"_id": req.params.id})
+  await Image.deleteOne(img)
+})
 
 
 app.listen(5000,()=>{
